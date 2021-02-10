@@ -1,0 +1,20 @@
+# action.yml
+name: 'parse-review-comments'
+description: 'Gets the review from PR and parse it '
+inputs:
+  GITHUB_TOKEN:
+    description: "A GitHub token for the repo"
+    required: false
+    default: ${{ github.token }}
+  PR_NUMBER:
+    description: "PR number"
+    required: true
+    
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --token
+    - ${{ inputs.GITHUB_TOKEN }}
+    - --pr-number
+    - ${{ inputs.PR_NUMBER }}
