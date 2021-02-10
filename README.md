@@ -8,7 +8,7 @@ Github action to check review comment etiquette
 ''' Input required : GITHUB_TOKEN '''
 
 >example: 
- >>   -name: 'review comment etiquette' 
- >>    uses: HomexLabs/review-comment-etiquette-action@v1 
- >>    with: 
- >>      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+ >>   -name: 'review comment etiquette'  
+ >>    uses: HomexLabs/review-comment-etiquette-action@v1. 
+ >>    with:  
+ >>      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}. 
