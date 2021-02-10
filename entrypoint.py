@@ -16,6 +16,9 @@ def setup_args():
 
 def fuzzy_review_comment_check(comment_body):
     first_word = comment_body.split()[0]
+    if first_word != "⚠️":
+        first_word = re.sub('[^A-Za-z0-9]+', '', first_word) #removing special character
+        
     match = get_close_matches(first_word, pref_list, cutoff=0.8)
     if not match:
         return False
@@ -47,11 +50,17 @@ def review_comment_edit(id, github, body):
 
 
 def main():
-    job_name = os.environ["GITHUB_WORKFLOW"]
     global repository_name
+    global pref_list
+    global pr
+    
+    job_name = os.environ["GITHUB_WORKFLOW"]
     repository_name = os.environ["GITHUB_REPOSITORY"]
     git_ref = os.environ["GITHUB_REF"]
-    global pref_list
+    # setup arguments
+    args = setup_args()
+    github = args.token
+    
     pref_list = [
         "Change",
         "Question",
@@ -62,23 +71,15 @@ def main():
         "Nitpick",
         "Guide",
         "⚠️ ",
-    ]
-    # setup arguments
-    args = setup_args()
-    github = args.token
-    global pr
-    
+    ]   
     pr = git_ref.split("/")[2]
-
     url = "https://api.github.com/repos/{}/pulls/{}/comments".format(
         repository_name, pr
     )
-
     headers = {
         "Accept": "application/vnd.github.v3+json",
         "Authorization": "Bearer " + str(github),
     }
-
     resp = requests.get(url=url, headers=headers)
     data = resp.json()
     parse_review_comment(data, github)
