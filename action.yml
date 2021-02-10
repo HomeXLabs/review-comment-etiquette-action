@@ -6,9 +6,6 @@ inputs:
     description: "A GitHub token for the repo"
     required: false
     default: ${{ github.token }}
-  PR_NUMBER:
-    description: "PR number"
-    required: true
     
 runs:
   using: 'docker'
@@ -16,5 +13,3 @@ runs:
   args:
     - --token
     - ${{ inputs.GITHUB_TOKEN }}
-    - --pr-number
-    - ${{ inputs.PR_NUMBER }}

@@ -3,7 +3,6 @@ import argparse
 import os
 import requests
 import json
-import re
 from difflib import get_close_matches
 from urllib.parse import urlparse
 
@@ -11,17 +10,12 @@ from urllib.parse import urlparse
 def setup_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--token", help="A GitHub token for the repo")
-    parser.add_argument("--pr-number", help="get the PR number")
 
     return parser.parse_args()
 
 
 def fuzzy_review_comment_check(comment_body):
     first_word = comment_body.split()[0]
-    if first_word != "⚠️":
-        first_word = re.sub('[^A-Za-z0-9]+', '', first_word) #removing special character
-        
-
     match = get_close_matches(first_word, pref_list, cutoff=0.8)
     if not match:
         return False
@@ -46,7 +40,7 @@ def review_comment_edit(id, github, body):
     }
     print(headers)
     payload = {
-        "body": "⚠️ " + str(body)
+        "body": str(body)
         + " \n\n⚠️ [PR Comment Etiquette](https://github.com/HomeXLabs/reviewington/blob/main/docs/pr_etiquette.md) not followed on above comment ⚠️"
     }
     resp = requests.patch(url=url, headers=headers, data=json.dumps(payload))
@@ -56,6 +50,7 @@ def main():
     job_name = os.environ["GITHUB_WORKFLOW"]
     global repository_name
     repository_name = os.environ["GITHUB_REPOSITORY"]
+    git_ref = os.environ["GITHUB_REF"]
     global pref_list
     pref_list = [
         "Change",
@@ -72,7 +67,8 @@ def main():
     args = setup_args()
     github = args.token
     global pr
-    pr = args.pr_number
+    
+    pr = git_ref.split("/")[2]
 
     url = "https://api.github.com/repos/{}/pulls/{}/comments".format(
         repository_name, pr
