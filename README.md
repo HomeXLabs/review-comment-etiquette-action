@@ -15,7 +15,7 @@ document
 
 ```bash
 -name: 'review comment etiquette'
- uses: HomexLabs/review-comment-etiquette-action@v1.0.2
+ uses: HomexLabs/review-comment-etiquette-action@v1.0.1
  with: 
    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
