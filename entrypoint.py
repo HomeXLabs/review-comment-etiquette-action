@@ -44,7 +44,7 @@ def review_comment_edit(id, github, body):
     }
     print(headers)
     payload = {
-        "body": "⚠️" + str(body)
+        "body": "⚠️ " + str(body)
         + " \n\n⚠️ [PR Comment Etiquette](https://github.com/HomeXLabs/reviewington/blob/main/docs/pr_etiquette.md) not followed on above comment ⚠️"
     }
     resp = requests.patch(url=url, headers=headers, data=json.dumps(payload))
