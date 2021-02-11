@@ -3,6 +3,7 @@ import argparse
 import os
 import requests
 import json
+import re
 from difflib import get_close_matches
 from urllib.parse import urlparse
 
